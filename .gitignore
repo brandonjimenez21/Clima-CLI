@@ -1,0 +1,27 @@
+# Binarios y ejecutables
+/clima-cli
+/clima-cli.exe
+bin/
+obj/
+
+# Variables de entorno (¡Muy importante!)
+.env
+.env.local
+.env.*.local
+
+# Dependencias de Go
+vendor/
+go.sum
+
+# Archivos de sistema y editores
+.vscode/
+.idea/
+.DS_Store
+*.swp
+*.bak
+
+# Logs
+*.log
+
+# Docker (Opcional, si no quieres subir capas locales)
+.docker/
