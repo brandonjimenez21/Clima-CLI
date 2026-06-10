@@ -21,6 +21,9 @@ jobs:
       - name: Verify dependencies
         run: go mod verify
 
+      - name: Download modules explicitly
+        run: go mod download
+
       - name: Run go fmt
         run: if [ "$(go fmt ./... | wc -l)" -gt 0 ]; then exit 1; fi
 
