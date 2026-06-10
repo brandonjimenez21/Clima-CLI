@@ -30,6 +30,9 @@ export namespace model {
 	    Sunset: string;
 	    RainProb: number;
 	    IsGoldenHour: boolean;
+	    AirQuality: number;
+	    AlertTitle: string;
+	    AlertDescription: string;
 	
 	    static createFrom(source: any = {}) {
 	        return new Weather(source);
@@ -52,6 +55,9 @@ export namespace model {
 	        this.Sunset = source["Sunset"];
 	        this.RainProb = source["RainProb"];
 	        this.IsGoldenHour = source["IsGoldenHour"];
+	        this.AirQuality = source["AirQuality"];
+	        this.AlertTitle = source["AlertTitle"];
+	        this.AlertDescription = source["AlertDescription"];
 	    }
 	
 		convertValues(a: any, classs: any, asMap: boolean = false): any {

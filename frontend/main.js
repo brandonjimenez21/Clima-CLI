@@ -95,27 +95,38 @@ async function getWeather(specificCity = null) {
 
     try {
         const result = await window.go.main.App.GetWeather(city);
+        localStorage.setItem(`weather-cache-${city.toLowerCase()}`, JSON.stringify(result));
         
-        cityName.textContent = result.City;
-        temp.textContent = Math.round(result.Temperature);
-        description.textContent = result.Description;
-        feelsLike.textContent = `${result.FeelsLike.toFixed(1)}°C`;
-        humidity.textContent = `${result.Humidity}%`;
-        wind.textContent = `${result.WindSpeed} m/s`;
-        rainProb.textContent = `${result.RainProb}%`;
-        sunrise.textContent = result.Sunrise;
-        sunset.textContent = result.Sunset;
-
-        applyWeatherEffects(result.Condition, result.IsNight, result.IsGoldenHour);
-        updateForecastChart(result.Forecast);
-        weatherResult.classList.remove('hidden');
+        displayWeather(result);
     } catch (err) {
-        errorMsg.textContent = err;
-        errorMsg.classList.remove('hidden');
-        document.body.className = 'default';
+        // Try cache
+        const cached = localStorage.getItem(`weather-cache-${city.toLowerCase()}`);
+        if (cached) {
+            displayWeather(JSON.parse(cached));
+        } else {
+            errorMsg.textContent = "No se pudo obtener el clima y no hay datos guardados.";
+            errorMsg.classList.remove('hidden');
+            document.body.className = 'default';
+        }
     } finally {
         loader.classList.add('hidden');
     }
+}
+
+function displayWeather(result) {
+    cityName.textContent = result.City;
+    temp.textContent = Math.round(result.Temperature);
+    description.textContent = result.Description;
+    feelsLike.textContent = `${result.FeelsLike.toFixed(1)}°C`;
+    humidity.textContent = `${result.Humidity}%`;
+    wind.textContent = `${result.WindSpeed} m/s`;
+    rainProb.textContent = `${result.RainProb}%`;
+    sunrise.textContent = result.Sunrise;
+    sunset.textContent = result.Sunset;
+
+    applyWeatherEffects(result.Condition, result.IsNight, result.IsGoldenHour);
+    updateForecastChart(result.Forecast);
+    weatherResult.classList.remove('hidden');
 }
 
 async function init() {

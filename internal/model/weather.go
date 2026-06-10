@@ -25,6 +25,9 @@ type Weather struct {
 	Sunset           string          // Formatted sunset time
 	RainProb         int             // Probability of precipitation (percentage)
 	IsGoldenHour     bool            // True if it's sunrise or sunset
+	AirQuality       int             // AQI index (1=Good, 5=Very Poor)
+	AlertTitle       string          // Title of current weather alert
+	AlertDescription string          // Description of current weather alert
 }
 
 // CalculateThermalSensation returns a human-friendly string based on FeelsLike temperature
