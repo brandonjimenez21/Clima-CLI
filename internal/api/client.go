@@ -12,43 +12,43 @@ import (
 )
 
 const (
-	baseURL     = "https://api.openweathermap.org/data/2.5/weather"
-	forecastURL = "https://api.openweathermap.org/data/2.5/forecast"
+	baseURL      = "https://api.openweathermap.org/data/2.5/weather"
+	forecastURL  = "https://api.openweathermap.org/data/2.5/forecast"
 	pollutionURL = "https://api.openweathermap.org/data/2.5/air_pollution"
-	geoIPURL    = "https://ipapi.co/json/"
+	geoIPURL     = "https://ipapi.co/json/"
 )
 
 type pollutionResponse struct {
-    List []struct {
-        Main struct {
-            Aqi int `json:"aqi"`
-        } `json:"main"`
-    } `json:"list"`
+	List []struct {
+		Main struct {
+			Aqi int `json:"aqi"`
+		} `json:"main"`
+	} `json:"list"`
 }
 
 type openWeatherResponse struct {
-    Name  string `json:"name"`
-    Dt    int64  `json:"dt"`
-    Coord struct {
-        Lat float64 `json:"lat"`
-        Lon float64 `json:"lon"`
-    } `json:"coord"`
-    Sys struct {
-        Sunrise int64 `json:"sunrise"`
-        Sunset  int64 `json:"sunset"`
-    } `json:"sys"`
-    Main struct {
-        Temp      float64 `json:"temp"`
-        FeelsLike float64 `json:"feels_like"`
-        Humidity  int     `json:"humidity"`
-    } `json:"main"`
-    Weather []struct {
-        Main        string `json:"main"`
-        Description string `json:"description"`
-    } `json:"weather"`
-    Wind struct {
-        Speed float64 `json:"speed"`
-    } `json:"wind"`
+	Name  string `json:"name"`
+	Dt    int64  `json:"dt"`
+	Coord struct {
+		Lat float64 `json:"lat"`
+		Lon float64 `json:"lon"`
+	} `json:"coord"`
+	Sys struct {
+		Sunrise int64 `json:"sunrise"`
+		Sunset  int64 `json:"sunset"`
+	} `json:"sys"`
+	Main struct {
+		Temp      float64 `json:"temp"`
+		FeelsLike float64 `json:"feels_like"`
+		Humidity  int     `json:"humidity"`
+	} `json:"main"`
+	Weather []struct {
+		Main        string `json:"main"`
+		Description string `json:"description"`
+	} `json:"weather"`
+	Wind struct {
+		Speed float64 `json:"speed"`
+	} `json:"wind"`
 }
 
 type forecastResponse struct {
@@ -141,20 +141,20 @@ func (c *Client) GetWeather(city string) (*model.Weather, error) {
 		(data.Dt >= data.Sys.Sunset-goldenHourLimit && data.Dt <= data.Sys.Sunset+goldenHourLimit)
 
 	weather := &model.Weather{
-		City:        data.Name,
-		Temperature: data.Main.Temp,
-		FeelsLike:   data.Main.FeelsLike,
-		Humidity:    data.Main.Humidity,
-		Description: data.Weather[0].Description,
-		Condition:   data.Weather[0].Main,
-		WindSpeed:   data.Wind.Speed,
-		Forecast:    forecastPoints,
-		IsNight:     isNight,
+		City:         data.Name,
+		Temperature:  data.Main.Temp,
+		FeelsLike:    data.Main.FeelsLike,
+		Humidity:     data.Main.Humidity,
+		Description:  data.Weather[0].Description,
+		Condition:    data.Weather[0].Main,
+		WindSpeed:    data.Wind.Speed,
+		Forecast:     forecastPoints,
+		IsNight:      isNight,
 		IsGoldenHour: isGoldenHour,
-		Sunrise:     time.Unix(data.Sys.Sunrise, 0).Format("15:04"),
-		Sunset:      time.Unix(data.Sys.Sunset, 0).Format("15:04"),
-		RainProb:    rainProb,
-		UVIndex:     0,
+		Sunrise:      time.Unix(data.Sys.Sunrise, 0).Format("15:04"),
+		Sunset:       time.Unix(data.Sys.Sunset, 0).Format("15:04"),
+		RainProb:     rainProb,
+		UVIndex:      0,
 	}
 
 	// 3. Air Quality (AQI)
@@ -171,4 +171,4 @@ func (c *Client) GetWeather(city string) (*model.Weather, error) {
 	weather.CalculateThermalSensation()
 
 	return weather, nil
-	}
+}
