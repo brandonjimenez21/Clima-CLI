@@ -1,0 +1,17 @@
+{
+  "name": "clima-desktop",
+  "version": "2.0.0",
+  "author": {
+    "name": "username",
+    "email": "username@example.com"
+  },
+  "assetdir": "frontend",
+  "frontend:install": "",
+  "frontend:build": "",
+  "frontend:dev:watcher": "",
+  "frontend:dev:serverUrl": "",
+  "wailsjsdir": "./frontend/wailsjs",
+  "build:dir": "build/bin",
+  "outputfilename": "clima-desktop",
+  "appargs": ""
+}

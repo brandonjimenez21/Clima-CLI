@@ -1,68 +1,59 @@
-# 🌦️ Clima CLI v1.0
+# 🌦️ Clima Desktop App v2.0 (Wails Edition)
 
-[![Go Version](https://img.shields.io/badge/Go-1.24-blue?logo=go)](https://golang.org/)
-[![Docker Image](https://img.shields.io/badge/docker-clima--cli:2.0-blue?logo=docker)](https://hub.docker.com/)
+[![Go Version](https://img.shields.io/badge/Go-1.24.2-blue?logo=go)](https://golang.org/)
+[![Wails](https://img.shields.io/badge/Wails-v2-red)](https://wails.io/)
 [![License](https://img.shields.io/badge/license-MIT-green)](https://opensource.org/licenses/MIT)
 
-**Clima CLI** es una aplicación de terminal (TUI) moderna, interactiva y minimalista escrita en **Go**. Convierte tu terminal en una estación meteorológica profesional con un solo clic.
+**Clima Desktop App** es la evolución de Clima CLI hacia una aplicación de escritorio nativa, moderna y profesional. Utiliza **Go** para una lógica de backend potente y eficiente, combinada con una interfaz de usuario web elegante y fluida gracias a **Wails**.
 
 ---
 
 ## ✨ Características Principales
 
-- **Interfaz Interactiva (TUI):** Construida con [Bubble Tea](https://github.com/charmbracelet/bubbletea), permite buscar múltiples ciudades sin reiniciar la app.
-- **Sensación Térmica (Thermal Sensation):** Cálculo inteligente del impacto térmico real, categorizado humanamente (Gélido, Agradable, Caluroso, etc.).
-- **Persistencia de Configuración:** Carga automática de la API Key desde archivos `.env`.
-- **Modo "App":** Incluye lanzadores (`.bat` y `.sh`) para abrir la herramienta en su propia ventana dedicada.
-- **Arquitectura Stateless:** Procesamiento 100% en memoria, sin bases de datos, garantizando rapidez y privacidad.
+- **Visuales Enriquecidos:** Temas dinámicos (Lluvia, Nubes, Despejado), ciclo día/noche y **Golden Hour** animado.
+- **Alta Precisión:** Consultas optimizadas mediante coordenadas geográficas (Lat/Lon) para pronósticos de 24h exactos.
+- **Inteligencia de Ubicación:** Auto-detección de ciudad mediante IP al arrancar la aplicación.
+- **Personalización:** Sistema de favoritos persistente y métricas avanzadas (Lluvia, Amanecer/Atardecer).
+- **Diseño Responsive:** Interfaz adaptativa 100% fluida para cualquier tamaño de ventana.
 
 ---
 
 ## 🛠️ Stack Tecnológico
 
-- **Lenguaje:** Go 1.24 (aprovechando las últimas optimizaciones de rendimiento).
-- **TUI Framework:** [Charmbracelet](https://charm.sh/) (Bubble Tea, LipGloss, Bubbles).
-- **Contenerización:** Docker (Multi-stage build basado en Alpine).
-- **CI/CD:** GitHub Actions (Lint, Test & Docker Build).
+- **Backend:** Go 1.24.2 (Lógica de API y procesamiento geográfico).
+- **Frontend:** HTML5, CSS3 (Responsive), JavaScript (Vanilla).
+- **Framework:** [Wails v2](https://wails.io/) (Binding nativo entre Go y JS).
+- **APIs:** OpenWeatherMap, IPAPI (Geolocalización).
 
 ---
 
-## 🚀 Instalación y Uso de un Solo Clic
+## 🏗️ Arquitectura de la Aplicación
 
-### 1. Configuración Inicial
-Obtén tu API Key gratuita en [OpenWeatherMap](https://openweathermap.org/api) y configúrala en el archivo `.env`:
-```bash
-# Crea tu archivo .env basado en el ejemplo
-echo "CLIMA_API_KEY=tu_api_key_aqui" > .env
-```
-
-### 2. Construir la Imagen (Solo una vez)
-```bash
-docker build -t clima-cli:2.0 .
-```
-
-### 3. Ejecutar como una App
-- **Windows:** Haz doble clic en `clima-app.bat`.
-- **Linux/macOS:** Ejecuta `./clima-app.sh`.
+La aplicación utiliza un puente de comunicación asíncrono y persistencia local:
+1.  **Auto-Init:** El backend detecta la ubicación por IP al inicio para ofrecer datos inmediatos.
+2.  **Precisión Geográfica:** Las búsquedas obtienen coordenadas exactas, usadas para pedir el pronóstico de 24h (Gráfica), garantizando la máxima precisión técnica.
+3.  **Persistencia:** Los favoritos se guardan localmente para acceso rápido y sin latencia.
+4.  **UI Adaptativa:** Estilos CSS fluidos con efectos visuales acelerados por hardware.
 
 ---
 
-## 💻 Desarrollo Local (Sin Docker)
+## 🚀 Instalación y Desarrollo
 
-Si prefieres ejecutarlo nativamente con Go:
+### Requisitos Previos
+- **Go 1.24.2** o superior.
+- **Wails CLI** (`go install github.com/wailsapp/wails/v2/cmd/wails@latest`).
+- **WebView2** (Requerido para Windows).
 
-1. **Instalar dependencias:**
-   ```bash
-   go mod tidy
-   ```
-2. **Ejecutar modo interactivo:**
-   ```bash
-   go run cmd/clima-cli/main.go
-   ```
-3. **Ejecutar comando directo:**
-   ```bash
-   go run cmd/clima-cli/main.go get "Madrid"
-   ```
+### Guía de Desarrollo
+1.  **Configura tu API Key:** Asegúrate de tener tu archivo `.env` con `CLIMA_API_KEY`.
+2.  **Modo Desarrollo:**
+    ```bash
+    wails dev
+    ```
+3.  **Compilar para Producción:**
+    ```bash
+    wails build
+    ```
 
 ---
 
@@ -70,34 +61,17 @@ Si prefieres ejecutarlo nativamente con Go:
 
 ```text
 clima-cli/
-├── cmd/clima-cli/main.go     # Punto de entrada y orquestación
-├── internal/
-│   ├── api/client.go         # Consumo de API y lógica de entorno
-│   ├── model/weather.go      # Estructuras y lógica de sensación térmica
-│   └── ui/                   # Componentes visuales
-│       ├── formatter.go      # Estilos LipGloss
-│       └── tui.go            # Lógica interactiva Bubble Tea
-├── .github/workflows/ci.yml  # Pipeline de automatización
-├── clima-app.bat             # Lanzador para Windows
-├── clima-app.sh              # Lanzador para Linux/macOS
-├── Dockerfile                # Construcción optimizada Go 1.24
-└── .env                      # Configuración privada (No subir al repo)
+├── frontend/             # Interfaz Responsive y lógica JS
+├── internal/             # Lógica de negocio (API con precisión Lat/Lon, Models)
+├── main.go               # Punto de entrada de Wails
+├── app.go                # Controlador (Backend Bridge con Geolocation)
+└── wails.json            # Configuración del proyecto
 ```
 
 ---
 
-## 🐳 Detalles de Docker
-
-La imagen está optimizada para ser ultra ligera (~20MB):
-- **Stage 1 (Build):** Usa `golang:1.24-alpine` para compilar un binario estático.
-- **Stage 2 (Final):** Usa `alpine:3.19` con certificados CA para seguridad en peticiones HTTPS.
+## 🐳 Herencia CLI
+Este proyecto nació como una herramienta de terminal (`cmd/clima-cli`) y conserva su lógica central robusta, ahora potenciada con una experiencia visual de escritorio de primer nivel.
 
 ---
-
-## 📝 Notas de Versión (v1.0)
-- Primera versión estable con soporte TUI completo.
-- Validación de API Key y manejo de errores estilizado.
-- Soporte para espacios en nombres de ciudades y caracteres especiales.
-
----
-Desarrollado con ❤️ usando **Go** y **Charmbracelet**.
+Desarrollado con ❤️ combinando precisión de datos y diseño minimalista.

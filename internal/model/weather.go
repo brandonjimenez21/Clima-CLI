@@ -2,6 +2,12 @@ package model
 
 import "fmt"
 
+// ForecastPoint represents a single data point in the weather forecast
+type ForecastPoint struct {
+	Time string  `json:"Time"`
+	Temp float64 `json:"Temp"`
+}
+
 // Weather data structure
 type Weather struct {
 	City             string
@@ -9,8 +15,16 @@ type Weather struct {
 	FeelsLike        float64
 	Humidity         int
 	Description      string
+	Condition        string // Main condition: Clear, Clouds, Rain, etc.
 	WindSpeed        float64
-	ThermalSensation string // Description of the thermal feeling
+	ThermalSensation string          // Description of the thermal feeling
+	Forecast         []ForecastPoint // Next 24 hours
+	IsNight          bool            // True if it is night at the location
+	UVIndex          float64         // UV Index
+	Sunrise          string          // Formatted sunrise time
+	Sunset           string          // Formatted sunset time
+	RainProb         int             // Probability of precipitation (percentage)
+	IsGoldenHour     bool            // True if it's sunrise or sunset
 }
 
 // CalculateThermalSensation returns a human-friendly string based on FeelsLike temperature
